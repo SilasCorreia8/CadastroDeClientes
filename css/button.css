@@ -9,15 +9,15 @@
     transition: box-shadow .6s ease;
 }
 
-.button .blue {
+.button.blue {
     background-color: #1FB6FF;
 }
 
-.button .green {
+.button.green {
     background-color: #13CE66;
 }
 
-.button .red {
+.button.red {
     background-color: #FF4949;
 }
 
@@ -25,7 +25,7 @@
     box-shadow: insert 200px 0 0 #00000055;
 }
 
-@media(max-widht:480px) {
+@media (max-widht:480px) {
     .button .mobile{
         color: transparent;
         font-size: 0;

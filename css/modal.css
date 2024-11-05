@@ -9,7 +9,7 @@
     z-index: -1;
 }
 
-.modal .active {
+.modal.active {
     opacity: 1;
     z-index: 1;
 }
@@ -18,7 +18,8 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    width: 50vh auto;
+    width: 50vw;
+    margin: 15vh auto;
     padding-bottom: 20px;
     background-color: white;
     box-shadow: 1px 1px 10px black;
@@ -29,6 +30,7 @@
     position: relative;
     justify-content: center;
     height: 40px;
+    line-height: 40px;
     font-size: 1rem;
 }
 
@@ -84,7 +86,7 @@
         transition: all 1s ease;
     }
 
-    .modal .active {
+    .modal.active {
         top: 0;
     }
 
