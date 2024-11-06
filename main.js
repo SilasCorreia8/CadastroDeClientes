@@ -4,13 +4,6 @@ const closeModal = () => {
     document.getElementById('modal').classList.remove('active');
 }
 
-const tempClient = {
-    nome: "Silas",
-    email: "silas@gmail.com",
-    celular: "73911112222",
-    cidade: "Salvador"
-}
-
 const getLocalStorage = () => JSON.parse(localStorage.getItem('dbClient')) ?? [];
 const setLocalStorage = (dbClient) => localStorage.setItem("dbClient", JSON.stringify(dbClient));
 
@@ -57,10 +50,58 @@ const saveClient = () => {
             cidade: document.getElementById('cidade').value
         }
         createClient(client);
+        updateTable();
         closeModal();
         console.log("Cadastrando Cliente");
     }
 }
+
+const createRow = (client, index) => {
+    if (!client) {
+        console.log('teste');
+        return;
+    } 
+    const newRow = document.createElement('tr');
+    newRow.innerHTML = `
+        <td>${client.nome}</td>
+        <td>${client.email}</td>
+        <td>${client.celular}</td>
+        <td>${client.cidade}</td>
+        <td>
+            <button type="button" class="button green" id="edit-${index}">Editar</button>
+            <button type="button" class="button red" id="delete-${index}">Excluir</button>
+        </td>
+    `
+    console.log("True")
+    document.querySelector('#tableClient>tbody').appendChild(newRow);
+}
+
+const clearTable = () => {
+    const rows = document.querySelectorAll('#tableClient>tbody tr');
+    rows.forEach(row => row.parentNode.removeChild(row));
+}
+
+const updateTable = () => {
+    const dbClient = readClient();
+    clearTable();
+    dbClient.forEach(createRow);
+}
+
+const editDelete = (event) => {
+    if (event.target.type == "button") {
+
+        const [action, index] = event.target.id.split("-");
+        if (action == "edit") {
+            console.log("Editando o cliente!");
+        } else {
+            console.log("Deletando o cliente!");
+        }
+
+        console.log(action, index)
+    }
+}
+
+updateTable();
 
 //Eventos
 document.getElementById('cadastrarCliente').addEventListener('click', openModal);
@@ -68,3 +109,5 @@ document.getElementById('cadastrarCliente').addEventListener('click', openModal)
 document.getElementById('modalClose').addEventListener('click', closeModal);
 
 document.getElementById('salvar').addEventListener('click', saveClient);
+
+document.querySelector('#tableClient>tbody').addEventListener('click', editDelete);
