@@ -26,9 +26,14 @@ const updateClient = (index, client) => {
 
 //CRUD - Delete
 const deleteClient = (index) => {
-    const dbClient = readClient();
-    dbClient.splice(index,1);
-    setLocalStorage(dbClient);
+    const client = readClient()[index];
+    const response = confirm(`Deseja deletar o cliente ${client.nome} do banco de dados?`);
+    if (response) {
+        const dbClient = readClient();
+        dbClient.splice(index,1);
+        setLocalStorage(dbClient);
+        updateTable();
+    }
 }
 
 const isValidFields = () => {
@@ -49,16 +54,24 @@ const saveClient = () => {
             celular: document.getElementById('celular').value,
             cidade: document.getElementById('cidade').value
         }
-        createClient(client);
-        updateTable();
-        closeModal();
-        console.log("Cadastrando Cliente");
+        const index = document.getElementById('nome').dataset.index;
+        if (index == "new") {
+            createClient(client);
+            updateTable();
+            closeModal();
+        } else {
+            updateClient(index, client);
+            updateTable();
+            closeModal();
+        }
+        
+        
     }
 }
 
 const createRow = (client, index) => {
     if (!client) {
-        console.log('teste');
+        console.log('Objeto Nulo');
         return;
     } 
     const newRow = document.createElement('tr');
@@ -72,7 +85,6 @@ const createRow = (client, index) => {
             <button type="button" class="button red" id="delete-${index}">Excluir</button>
         </td>
     `
-    console.log("True")
     document.querySelector('#tableClient>tbody').appendChild(newRow);
 }
 
@@ -87,17 +99,32 @@ const updateTable = () => {
     dbClient.forEach(createRow);
 }
 
+const fillFields = (client) => {
+    document.getElementById('nome').value = client.nome;
+    document.getElementById('email').value = client.email;
+    document.getElementById('celular').value = client.celular;
+    document.getElementById('cidade').value = client.cidade;
+    document.getElementById('nome').dataset.index = client.index;
+}
+
+//Botão edit
+const editClient = (index) => {
+    const client = readClient()[index];
+    client.index = index;
+    fillFields(client);
+    openModal();
+}
+
+//Configurando botões edit e delete
 const editDelete = (event) => {
     if (event.target.type == "button") {
 
         const [action, index] = event.target.id.split("-");
         if (action == "edit") {
-            console.log("Editando o cliente!");
+            editClient(index);
         } else {
-            console.log("Deletando o cliente!");
+            deleteClient(index);
         }
-
-        console.log(action, index)
     }
 }
 
